@@ -1,4 +1,4 @@
-var cellDim = 10 //cell dimensions
+var cellDim = 17 //cell dimensions
 // set up output channel
 
 var channel0 = createOutputChannel(0,1);
@@ -50,26 +50,17 @@ function convertToFreq(cellArr){
 
 //run the CA repeatedly and send the output at each stage
 function runAndSend(){
-	let runs = 10;
-	for (let i=1; 1 < runs; i++){
+	let runs = 10000;
+	for (let i=1; i < runs; i++){
 		run(); // run the CA
 		console.log(cells); //print the new cell states
-
-		freq = convertToFreq(cells)
-		channel0.send(freq)
+		//console.log(i);
+		freq = convertToFreq(cells); //convert cell states to decimal for a "frequency"
+		channel0.send(freq); //send the frequency over to the LC window
 		//params.send(cells) //send the new cell states
 	}
+	console.log('finished :)')
 }
 
 runAndSend();
 
-__________
-
-//route the test data into the model
-var w = 0;
-input = (x, id) => {
-	console.log(">toModel: "+[id,x]);
-	let prediction = test(x);
-	console.log('pred: ',prediction);
-	output(prediction, 0)
-};
